@@ -223,149 +223,199 @@ def _generar_tablero_html(widget_id: str, title: str, subtitle: str, items: list
 
 
 # ==============================================================================
-# FUNCIONES EXPORTADAS PARA CADA MÓDULO DEL CUADERNO
+# DATOS Y GENERACIÓN DE CADA DESAFÍO
 # ==============================================================================
+
+DESAFIOS_CONFIG = {
+    0: {
+        "id": "dd0",
+        "title": "🎮 Desafío 0: Matriz de Eisenhower en Software",
+        "subtitle": "Clasifica cada tarea en su cuadrante correcto",
+        "items": [
+            {"id": 1, "text": "🔥 Caída total de la base de datos en producción", "target": "c1"},
+            {"id": 2, "text": "🏛️ Refactorizar para separar reglas de negocio de la base de datos", "target": "c2"},
+            {"id": 3, "text": "📐 Definir interfaces abstractas para desacoplar pasarelas de pago", "target": "c2"},
+            {"id": 4, "text": "⏰ El cliente pide cambiar el color de un botón para una demo en 20 minutos", "target": "c3"},
+            {"id": 5, "text": "🩹 Copiar y pegar 50 líneas de código duplicado para salir del paso hoy", "target": "c3"},
+            {"id": 6, "text": "🌀 Debatir por 3 horas sobre cambiar las comillas de simple a doble en el linter", "target": "c4"}
+        ],
+        "zones": [
+            {"id": "c1", "title": "🚨 Cuadrante 1", "subtitle": "Urgente e Importante (Emergencias)", "color": "#f38ba8"},
+            {"id": "c2", "title": "🏛️ Cuadrante 2", "subtitle": "Importante, No Urgente (Arquitectura)", "color": "#a6e3a1"},
+            {"id": "c3", "title": "⏰ Cuadrante 3", "subtitle": "Urgente, No Importante (Presión diaria)", "color": "#f9e2af"},
+            {"id": "c4", "title": "🗑️ Cuadrante 4", "subtitle": "Ni Urgente ni Importante (Desperdicio)", "color": "#6c7086"}
+        ]
+    },
+    1: {
+        "id": "dd1",
+        "title": "🎮 Desafío 1: Diagnóstico de Principios SOLID",
+        "subtitle": "Arrastra cada síntoma o solución a su principio SOLID correspondiente",
+        "items": [
+            {"id": 1, "text": "👥 Finanzas modificó el cálculo de horas y rompió los reportes de Operaciones", "target": "srp"},
+            {"id": 2, "text": "🔓 Para soportar MercadoPago tuvimos que editar 8 archivos con 'if pasarela == ...'", "target": "ocp"},
+            {"id": 3, "text": "🔄 La clase de Pedidos importa directamente el cliente SDK concreto de Twilio", "target": "dip"},
+            {"id": 4, "text": "📏 Un cliente que solo consulta saldo está obligado a implementar 12 métodos que no usa", "target": "isp"},
+            {"id": 5, "text": "⚠️ Una subclase lanza una excepción imprevista cuando se usa en lugar de su clase padre", "target": "lsp"},
+            {"id": 6, "text": "🔌 Definir una interfaz PasarelaPago para que el procesador no conozca librerías externas", "target": "dip"}
+        ],
+        "zones": [
+            {"id": "srp", "title": "👤 SRP", "subtitle": "Responsabilidad Única (Actores)", "color": "#f9e2af"},
+            {"id": "ocp", "title": "🔓 OCP", "subtitle": "Abierto/Cerrado (Extensión)", "color": "#a6e3a1"},
+            {"id": "lsp", "title": "📐 LSP", "subtitle": "Sustitución de Liskov (Contratos)", "color": "#89dceb"},
+            {"id": "isp", "title": "✂️ ISP", "subtitle": "Segregación de Interfaces", "color": "#cba6f7"},
+            {"id": "dip", "title": "🔄 DIP", "subtitle": "Inversión de Dependencias", "color": "#f38ba8"}
+        ]
+    },
+    2: {
+        "id": "dd2",
+        "title": "🎮 Desafío 2: Entidades vs. Casos de Uso vs. DTOs",
+        "subtitle": "Arrastra cada elemento a su categoría del núcleo de negocio",
+        "items": [
+            {"id": 1, "text": "🌟 Regla de cálculo de cuota mensual según amortización francesa", "target": "ent"},
+            {"id": 2, "text": "🌟 Validar que el saldo de la cuenta no supere el límite de descubierto", "target": "ent"},
+            {"id": 3, "text": "⚙️ Orquestar: buscar préstamo, verificar solicitante, aprobar y persistir", "target": "uc"},
+            {"id": 4, "text": "⚙️ Coordinar el flujo entre la pasarela de pago y la cuenta de destino", "target": "uc"},
+            {"id": 5, "text": "📦 SolicitudPrestamoRequest (id_cliente, monto, plazo_meses)", "target": "dto"},
+            {"id": 6, "text": "📦 SolicitudPrestamoResponse (exito, mensaje, total_a_devolver)", "target": "dto"}
+        ],
+        "zones": [
+            {"id": "ent", "title": "🌟 Entidades", "subtitle": "Reglas Críticas de Empresa", "color": "#f9e2af"},
+            {"id": "uc", "title": "⚙️ Casos de Uso", "subtitle": "Reglas de la Aplicación", "color": "#f38ba8"},
+            {"id": "dto", "title": "📦 DTOs (Request / Response)", "subtitle": "Estructuras de Datos Planas", "color": "#a6e3a1"}
+        ]
+    },
+    3: {
+        "id": "dd3",
+        "title": "🎮 Desafío 3: Los 4 Círculos Concéntricos",
+        "subtitle": "Ubica cada componente en su capa correspondiente según Uncle Bob",
+        "items": [
+            {"id": 1, "text": "🏷️ Entidad CuentaBancaria con reglas de saldo", "target": "c1"},
+            {"id": 2, "text": "⚙️ TransferirDineroUseCase (orquestador)", "target": "c2"},
+            {"id": 3, "text": "⚙️ Puerto abstracto CuentaRepositoryPort (interfaz)", "target": "c2"},
+            {"id": 4, "text": "🔌 TransferenciaPresenter (convierte a ViewModel)", "target": "c3"},
+            {"id": 5, "text": "🔌 FakeHttpWebController (recibe y parsea JSON)", "target": "c3"},
+            {"id": 6, "text": "💾 Base de Datos PostgreSQL y tablas SQL", "target": "c4"},
+            {"id": 7, "text": "🌐 Framework FastAPI / Flask / Django", "target": "c4"}
+        ],
+        "zones": [
+            {"id": "c1", "title": "🟡 1. Entidades", "subtitle": "Enterprise Business Rules", "color": "#f9e2af"},
+            {"id": "c2", "title": "🔴 2. Casos de Uso", "subtitle": "Application Business Rules", "color": "#f38ba8"},
+            {"id": "c3", "title": "🟢 3. Adaptadores", "subtitle": "Controllers, Presenters", "color": "#a6e3a1"},
+            {"id": "c4", "title": "🔵 4. Frameworks", "subtitle": "DB, Web, Dispositivos", "color": "#89b4fa"}
+        ]
+    },
+    4: {
+        "id": "dd4",
+        "title": "🎮 Desafío 4: El Patrón Humble Object",
+        "subtitle": "Separa la lógica testeable de la infraestructura tonta",
+        "items": [
+            {"id": 1, "text": "🧠 Presenter: transformar Decimal('14400') a '$ 14,400.00'", "target": "intel"},
+            {"id": 2, "text": "🧠 Determinar si la etiqueta dice 'APROBADO' o 'DENEGADO'", "target": "intel"},
+            {"id": 3, "text": "🧠 Decidir si el color de la UI es verde o rojo", "target": "intel"},
+            {"id": 4, "text": "🙈 Vista: imprimir por consola la variable viewModel.total_formateado", "target": "humilde"},
+            {"id": 5, "text": "🙈 Template HTML: estampar {{ viewModel.estado }} sin ningún 'if'", "target": "humilde"},
+            {"id": 6, "text": "🙈 Socket SQL: enviar bytes del string query al puerto de PostgreSQL", "target": "humilde"}
+        ],
+        "zones": [
+            {"id": "intel", "title": "🧠 Objeto Inteligente", "subtitle": "Presenter / ViewModel (Testeable)", "color": "#a6e3a1"},
+            {"id": "humilde", "title": "🙈 Objeto Humilde", "subtitle": "Vista / UI / I/O puro (Sin lógica)", "color": "#f9e2af"}
+        ]
+    },
+    5: {
+        "id": "dd5",
+        "title": "🎮 Desafío 5: Núcleo vs. Detalles",
+        "subtitle": "Distingue lo que grita tu arquitectura de las herramientas accesorias",
+        "items": [
+            {"id": 1, "text": "🏛️ Reglas de scoring crediticio y cálculo de capacidad de pago", "target": "arch"},
+            {"id": 2, "text": "🏛️ Caso de uso de Apertura de Cuenta Bancaria con depósito inicial", "target": "arch"},
+            {"id": 3, "text": "🏛️ Políticas de comisiones y límites de sobregiro", "target": "arch"},
+            {"id": 4, "text": "🔌 Motor de Base de Datos relacional PostgreSQL", "target": "det"},
+            {"id": 5, "text": "🔌 Mecanismo de entrega Web HTTP / Framework FastAPI", "target": "det"},
+            {"id": 6, "text": "🔌 Driver de conexión o librería ORM", "target": "det"}
+        ],
+        "zones": [
+            {"id": "arch", "title": "🏛️ Arquitectura Esencial", "subtitle": "Reglas de Negocio (Screaming Architecture)", "color": "#f9e2af"},
+            {"id": "det", "title": "🔌 Detalles Periféricos", "subtitle": "Plugins intercambiables (DB, Web, Frameworks)", "color": "#89b4fa"}
+        ]
+    },
+    6: {
+        "id": "dd6",
+        "title": "🎮 Desafío 6: Las Fronteras del Componente Main",
+        "subtitle": "Determina qué responsabilidades corresponden a la raíz de composición",
+        "items": [
+            {"id": 1, "text": "🔌 Instanciar la base de datos concreta PostgresCuentaRepository", "target": "main_si"},
+            {"id": 2, "text": "🔌 Inyectar el repositorio concreto dentro del caso de uso", "target": "main_si"},
+            {"id": 3, "text": "🔌 Leer variables de entorno (prod vs test) y configurar plugins", "target": "main_si"},
+            {"id": 4, "text": "🚫 Calcular si el cliente califica para un préstamo bancario", "target": "main_no"},
+            {"id": 5, "text": "🚫 Validar si el saldo es suficiente para la extracción", "target": "main_no"},
+            {"id": 6, "text": "🚫 Formatear el mensaje de salida con símbolos de moneda y colores", "target": "main_no"}
+        ],
+        "zones": [
+            {"id": "main_si", "title": "🔌 Pertenece a Main", "subtitle": "Composition Root / Cableado", "color": "#a6e3a1"},
+            {"id": "main_no", "title": "🚫 NUNCA debe estar en Main", "subtitle": "Reglas de Negocio / Presentación", "color": "#f38ba8"}
+        ]
+    },
+    7: {
+        "id": "dd7",
+        "title": "🎮 Desafío 7: Test Boundary en Clean Architecture",
+        "subtitle": "Identifica las pruebas que respetan los límites arquitectónicos",
+        "items": [
+            {"id": 1, "text": "⚡ Probar el Caso de Uso inyectando un Repositorio en Memoria (Fake)", "target": "clean_t"},
+            {"id": 2, "text": "⚡ Probar las reglas críticas de la Entidad directamente en memoria", "target": "clean_t"},
+            {"id": 3, "text": "⚡ Probar el Presenter comprobando que el ViewModel tenga las cadenas formateadas", "target": "clean_t"},
+            {"id": 4, "text": "🐢 Levantar un contenedor Docker con PostgreSQL real para probar un cálculo de suma", "target": "fragil_t"},
+            {"id": 5, "text": "🐢 Abrir un navegador con Selenium para comprobar una regla de negocio del caso de uso", "target": "fragil_t"},
+            {"id": 6, "text": "🐢 Probar la UI haciendo que la prueba dependa del esquema de tablas de la base de datos", "target": "fragil_t"}
+        ],
+        "zones": [
+            {"id": "clean_t", "title": "⚡ Pruebas en Clean Architecture", "subtitle": "Aisladas, corren en milisegundos (Puertos)", "color": "#a6e3a1"},
+            {"id": "fragil_t", "title": "🐢 Pruebas Frágiles / Acopladas", "subtitle": "Dependen de sockets, red o servidores", "color": "#f38ba8"}
+        ]
+    }
+}
+
+
+def obtener_html_desafio(num: int) -> str:
+    """Devuelve el código HTML autónomo para el desafío interactivo especificado."""
+    cfg = DESAFIOS_CONFIG[num]
+    return _generar_tablero_html(cfg["id"], cfg["title"], cfg["subtitle"], cfg["items"], cfg["zones"])
+
 
 def cargar_desafio_0():
     """Actividad No-Code Módulo 0: Matriz de Eisenhower en Software"""
-    items = [
-        {"id": 1, "text": "🔥 Caída total de la base de datos en producción", "target": "c1"},
-        {"id": 2, "text": "🏛️ Refactorizar para separar reglas de negocio de la base de datos", "target": "c2"},
-        {"id": 3, "text": "📐 Definir interfaces abstractas para desacoplar pasarelas de pago", "target": "c2"},
-        {"id": 4, "text": "⏰ El cliente pide cambiar el color de un botón para una demo en 20 minutos", "target": "c3"},
-        {"id": 5, "text": "🩹 Copiar y pegar 50 líneas de código duplicado para salir del paso hoy", "target": "c3"},
-        {"id": 6, "text": "🌀 Debatir por 3 horas sobre cambiar las comillas de simple a doble en el linter", "target": "c4"}
-    ]
-    zones = [
-        {"id": "c1", "title": "🚨 Cuadrante 1", "subtitle": "Urgente e Importante (Emergencias)", "color": "#f38ba8"},
-        {"id": "c2", "title": "🏛️ Cuadrante 2", "subtitle": "Importante, No Urgente (Arquitectura)", "color": "#a6e3a1"},
-        {"id": "c3", "title": "⏰ Cuadrante 3", "subtitle": "Urgente, No Importante (Presión diaria)", "color": "#f9e2af"},
-        {"id": "c4", "title": "🗑️ Cuadrante 4", "subtitle": "Ni Urgente ni Importante (Desperdicio)", "color": "#6c7086"}
-    ]
-    display(HTML(_generar_tablero_html("dd0", "🎮 Desafío 0: Matriz de Eisenhower en Software", "Clasifica cada tarea en su cuadrante correcto", items, zones)))
+    display(HTML(obtener_html_desafio(0)))
 
 
 def cargar_desafio_1():
     """Actividad No-Code Módulo 1: Diagnóstico de Violaciones SOLID"""
-    items = [
-        {"id": 1, "text": "👥 Finanzas modificó el cálculo de horas y rompió los reportes de Operaciones", "target": "srp"},
-        {"id": 2, "text": "🔓 Para soportar MercadoPago tuvimos que editar 8 archivos con 'if pasarela == ...'", "target": "ocp"},
-        {"id": 3, "text": "🔄 La clase de Pedidos importa directamente el cliente SDK concreto de Twilio", "target": "dip"},
-        {"id": 4, "text": "📏 Un cliente que solo consulta saldo está obligado a implementar 12 métodos que no usa", "target": "isp"},
-        {"id": 5, "text": "⚠️ Una subclase lanza una excepción imprevista cuando se usa en lugar de su clase padre", "target": "lsp"},
-        {"id": 6, "text": "🔌 Definir una interfaz PasarelaPago para que el procesador no conozca librerías externas", "target": "dip"}
-    ]
-    zones = [
-        {"id": "srp", "title": "👤 SRP", "subtitle": "Responsabilidad Única (Actores)", "color": "#f9e2af"},
-        {"id": "ocp", "title": "🔓 OCP", "subtitle": "Abierto/Cerrado (Extensión)", "color": "#a6e3a1"},
-        {"id": "lsp", "title": "📐 LSP", "subtitle": "Sustitución de Liskov (Contratos)", "color": "#89dceb"},
-        {"id": "isp", "title": "✂️ ISP", "subtitle": "Segregación de Interfaces", "color": "#cba6f7"},
-        {"id": "dip", "title": "🔄 DIP", "subtitle": "Inversión de Dependencias", "color": "#f38ba8"}
-    ]
-    display(HTML(_generar_tablero_html("dd1", "🎮 Desafío 1: Diagnóstico de Principios SOLID", "Arrastra cada síntoma o solución a su principio SOLID correspondiente", items, zones)))
+    display(HTML(obtener_html_desafio(1)))
 
 
 def cargar_desafio_2():
     """Actividad No-Code Módulo 2: Entidades vs. Casos de Uso vs. DTOs"""
-    items = [
-        {"id": 1, "text": "🌟 Regla de cálculo de cuota mensual según amortización francesa", "target": "ent"},
-        {"id": 2, "text": "🌟 Validar que el saldo de la cuenta no supere el límite de descubierto", "target": "ent"},
-        {"id": 3, "text": "⚙️ Orquestar: buscar préstamo, verificar solicitante, aprobar y persistir", "target": "uc"},
-        {"id": 4, "text": "⚙️ Coordinar el flujo entre la pasarela de pago y la cuenta de destino", "target": "uc"},
-        {"id": 5, "text": "📦 SolicitudPrestamoRequest (id_cliente, monto, plazo_meses)", "target": "dto"},
-        {"id": 6, "text": "📦 SolicitudPrestamoResponse (exito, mensaje, total_a_devolver)", "target": "dto"}
-    ]
-    zones = [
-        {"id": "ent", "title": "🌟 Entidades", "subtitle": "Reglas Críticas de Empresa", "color": "#f9e2af"},
-        {"id": "uc", "title": "⚙️ Casos de Uso", "subtitle": "Reglas de la Aplicación", "color": "#f38ba8"},
-        {"id": "dto", "title": "📦 DTOs (Request / Response)", "subtitle": "Estructuras de Datos Planas", "color": "#a6e3a1"}
-    ]
-    display(HTML(_generar_tablero_html("dd2", "🎮 Desafío 2: Entidades vs. Casos de Uso vs. DTOs", "Arrastra cada elemento a su categoría del núcleo de negocio", items, zones)))
+    display(HTML(obtener_html_desafio(2)))
 
 
 def cargar_desafio_3():
     """Actividad No-Code Módulo 3: Los 4 Círculos Concéntricos"""
-    items = [
-        {"id": 1, "text": "🏷️ Entidad CuentaBancaria con reglas de saldo", "target": "c1"},
-        {"id": 2, "text": "⚙️ TransferirDineroUseCase (orquestador)", "target": "c2"},
-        {"id": 3, "text": "⚙️ Puerto abstracto CuentaRepositoryPort (interfaz)", "target": "c2"},
-        {"id": 4, "text": "🔌 TransferenciaPresenter (convierte a ViewModel)", "target": "c3"},
-        {"id": 5, "text": "🔌 FakeHttpWebController (recibe y parsea JSON)", "target": "c3"},
-        {"id": 6, "text": "💾 Base de Datos PostgreSQL y tablas SQL", "target": "c4"},
-        {"id": 7, "text": "🌐 Framework FastAPI / Flask / Django", "target": "c4"}
-    ]
-    zones = [
-        {"id": "c1", "title": "🟡 1. Entidades", "subtitle": "Enterprise Business Rules", "color": "#f9e2af"},
-        {"id": "c2", "title": "🔴 2. Casos de Uso", "subtitle": "Application Business Rules", "color": "#f38ba8"},
-        {"id": "c3", "title": "🟢 3. Adaptadores", "subtitle": "Controllers, Presenters", "color": "#a6e3a1"},
-        {"id": "c4", "title": "🔵 4. Frameworks", "subtitle": "DB, Web, Dispositivos", "color": "#89b4fa"}
-    ]
-    display(HTML(_generar_tablero_html("dd3", "🎮 Desafío 3: Los 4 Círculos Concéntricos", "Ubica cada componente en su capa correspondiente según Uncle Bob", items, zones)))
+    display(HTML(obtener_html_desafio(3)))
 
 
 def cargar_desafio_4():
     """Actividad No-Code Módulo 4: El Patrón Humble Object"""
-    items = [
-        {"id": 1, "text": "🧠 Presenter: transformar Decimal('14400') a '$ 14,400.00'", "target": "intel"},
-        {"id": 2, "text": "🧠 Determinar si la etiqueta dice 'APROBADO' o 'DENEGADO'", "target": "intel"},
-        {"id": 3, "text": "🧠 Decidir si el color de la UI es verde o rojo", "target": "intel"},
-        {"id": 4, "text": "🙈 Vista: imprimir por consola la variable viewModel.total_formateado", "target": "humilde"},
-        {"id": 5, "text": "🙈 Template HTML: estampar {{ viewModel.estado }} sin ningún 'if'", "target": "humilde"},
-        {"id": 6, "text": "🙈 Socket SQL: enviar bytes del string query al puerto de PostgreSQL", "target": "humilde"}
-    ]
-    zones = [
-        {"id": "intel", "title": "🧠 Objeto Inteligente", "subtitle": "Presenter / ViewModel (Testeable)", "color": "#a6e3a1"},
-        {"id": "humilde", "title": "🙈 Objeto Humilde", "subtitle": "Vista / UI / I/O puro (Sin lógica)", "color": "#f9e2af"}
-    ]
-    display(HTML(_generar_tablero_html("dd4", "🎮 Desafío 4: El Patrón Humble Object", "Separa la lógica testeable de la infraestructura tonta", items, zones)))
+    display(HTML(obtener_html_desafio(4)))
 
 
 def cargar_desafio_5():
     """Actividad No-Code Módulo 5: Núcleo vs. Detalles"""
-    items = [
-        {"id": 1, "text": "🏛️ Reglas de scoring crediticio y cálculo de capacidad de pago", "target": "arch"},
-        {"id": 2, "text": "🏛️ Caso de uso de Apertura de Cuenta Bancaria con depósito inicial", "target": "arch"},
-        {"id": 3, "text": "🏛️ Políticas de comisiones y límites de sobregiro", "target": "arch"},
-        {"id": 4, "text": "🔌 Motor de Base de Datos relacional PostgreSQL", "target": "det"},
-        {"id": 5, "text": "🔌 Mecanismo de entrega Web HTTP / Framework FastAPI", "target": "det"},
-        {"id": 6, "text": "🔌 Driver de conexión o librería ORM", "target": "det"}
-    ]
-    zones = [
-        {"id": "arch", "title": "🏛️ Arquitectura Esencial", "subtitle": "Reglas de Negocio (Screaming Architecture)", "color": "#f9e2af"},
-        {"id": "det", "title": "🔌 Detalles Periféricos", "subtitle": "Plugins intercambiables (DB, Web, Frameworks)", "color": "#89b4fa"}
-    ]
-    display(HTML(_generar_tablero_html("dd5", "🎮 Desafío 5: Núcleo vs. Detalles", "Distingue lo que grita tu arquitectura de las herramientas accesorias", items, zones)))
+    display(HTML(obtener_html_desafio(5)))
 
 
 def cargar_desafio_6():
     """Actividad No-Code Módulo 6: Las Fronteras del Componente Main"""
-    items = [
-        {"id": 1, "text": "🔌 Instanciar la base de datos concreta PostgresCuentaRepository", "target": "main_si"},
-        {"id": 2, "text": "🔌 Inyectar el repositorio concreto dentro del caso de uso", "target": "main_si"},
-        {"id": 3, "text": "🔌 Leer variables de entorno (prod vs test) y configurar plugins", "target": "main_si"},
-        {"id": 4, "text": "🚫 Calcular si el cliente califica para un préstamo bancario", "target": "main_no"},
-        {"id": 5, "text": "🚫 Validar si el saldo es suficiente para la extracción", "target": "main_no"},
-        {"id": 6, "text": "🚫 Formatear el mensaje de salida con símbolos de moneda y colores", "target": "main_no"}
-    ]
-    zones = [
-        {"id": "main_si", "title": "🔌 Pertenece a Main", "subtitle": "Composition Root / Cableado", "color": "#a6e3a1"},
-        {"id": "main_no", "title": "🚫 NUNCA debe estar en Main", "subtitle": "Reglas de Negocio / Presentación", "color": "#f38ba8"}
-    ]
-    display(HTML(_generar_tablero_html("dd6", "🎮 Desafío 6: Las Fronteras del Componente Main", "Determina qué responsabilidades corresponden a la raíz de composición", items, zones)))
+    display(HTML(obtener_html_desafio(6)))
 
 
 def cargar_desafio_7():
     """Actividad No-Code Módulo 7: Test Boundary en Clean Architecture"""
-    items = [
-        {"id": 1, "text": "⚡ Probar el Caso de Uso inyectando un Repositorio en Memoria (Fake)", "target": "clean_t"},
-        {"id": 2, "text": "⚡ Probar las reglas críticas de la Entidad directamente en memoria", "target": "clean_t"},
-        {"id": 3, "text": "⚡ Probar el Presenter comprobando que el ViewModel tenga las cadenas formateadas", "target": "clean_t"},
-        {"id": 4, "text": "🐢 Levantar un contenedor Docker con PostgreSQL real para probar un cálculo de suma", "target": "fragil_t"},
-        {"id": 5, "text": "🐢 Abrir un navegador con Selenium para comprobar una regla de negocio del caso de uso", "target": "fragil_t"},
-        {"id": 6, "text": "🐢 Probar la UI haciendo que la prueba dependa del esquema de tablas de la base de datos", "target": "fragil_t"}
-    ]
-    zones = [
-        {"id": "clean_t", "title": "⚡ Pruebas en Clean Architecture", "subtitle": "Aisladas, corren en milisegundos (Puertos)", "color": "#a6e3a1"},
-        {"id": "fragil_t", "title": "🐢 Pruebas Frágiles / Acopladas", "subtitle": "Dependen de sockets, red o servidores", "color": "#f38ba8"}
-    ]
-    display(HTML(_generar_tablero_html("dd7", "🎮 Desafío 7: Test Boundary en Clean Architecture", "Identifica las pruebas que respetan los límites arquitectónicos", items, zones)))
+    display(HTML(obtener_html_desafio(7)))
