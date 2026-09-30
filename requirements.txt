@@ -1,0 +1,4 @@
+# Dependencias del entorno de ejecución para la Masterclass de Clean Architecture
+ipykernel>=6.29.0
+ipython>=8.20.0
+pypdf>=5.0.0

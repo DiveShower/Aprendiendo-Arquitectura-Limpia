@@ -103,11 +103,11 @@ python3 -m venv .venv
 source .venv/bin/activate
 ```
 
-### 3. Instalar dependencias del kernel
-El proyecto solo requiere librerías estándar de Python y el soporte de Jupyter (`ipykernel` y `pypdf` para consulta de fuentes):
+### 3. Instalar dependencias
+Instala los paquetes necesarios desde `requirements.txt`:
 ```bash
 pip install --upgrade pip
-pip install ipykernel pypdf
+pip install -r requirements.txt
 ```
 
 ### 4. Registrar el Kernel en Jupyter
